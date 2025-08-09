@@ -19,7 +19,8 @@ import {
 
 export function GridView() {
   const entries = useFilteredEntries()
-  const { setCurrentEntry, updateEntry, deleteEntry } = useAppStore()
+  const allEntries = useEntries()
+  const { setCurrentEntry, updateEntry, deleteEntry, setSearchFilters } = useAppStore()
   const [gridSize, setGridSize] = useState<'small' | 'medium' | 'large'>('medium')
 
   const handleNewEntry = () => {
@@ -59,6 +60,10 @@ export function GridView() {
       case 'large': return 'grid-cols-1 lg:grid-cols-2'
       default: return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
     }
+  }
+
+  const clearFilters = () => {
+    setSearchFilters({})
   }
 
   const getEntryPreview = (content: string, size: string) => {
@@ -120,14 +125,26 @@ export function GridView() {
                 <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
                   <Grid3X3 className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground" />
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold mb-2">No entries yet</h3>
+                <h3 className="text-base sm:text-lg font-semibold mb-2">
+                  {allEntries.length === 0 ? "No entries yet" : "No entries match your filters"}
+                </h3>
                 <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                  Start your journaling journey by creating your first entry
+                  {allEntries.length === 0 
+                    ? "Start your journaling journey by creating your first entry"
+                    : "Try clearing your search filters to see all entries"
+                  }
                 </p>
-                <Button onClick={handleNewEntry} className="gap-1 sm:gap-2 text-sm sm:text-base">
-                  <Plus className="h-4 w-4" />
-                  Write Your First Entry
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
+                  <Button onClick={handleNewEntry} className="gap-1 sm:gap-2 text-sm sm:text-base">
+                    <Plus className="h-4 w-4" />
+                    {allEntries.length === 0 ? "Write Your First Entry" : "Create New Entry"}
+                  </Button>
+                  {allEntries.length > 0 && (
+                    <Button onClick={clearFilters} variant="outline" className="gap-1 sm:gap-2 text-sm sm:text-base">
+                      Show All Entries
+                    </Button>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>

@@ -43,7 +43,7 @@ const aiPrompts = [
 ]
 
 export function EntryEditor() {
-  const { currentEntry, updateEntry, setCurrentEntry, addEntry, tags } = useAppStore()
+  const { currentEntry, updateEntry, setCurrentEntry, addEntry, tags, setSearchFilters } = useAppStore()
   const { toast } = useToast()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -96,6 +96,8 @@ export function EntryEditor() {
       })
     } else {
       addEntry(updatedEntry)
+      // Clear search filters so the new entry is visible
+      setSearchFilters({})
       toast({
         title: "Entry Saved",
         description: "Your journal entry has been successfully saved.",

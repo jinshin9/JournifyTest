@@ -9,7 +9,8 @@ import { Calendar, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 
 export function CalendarView() {
   const entries = useFilteredEntries()
-  const { setCurrentEntry } = useAppStore()
+  const allEntries = useEntries()
+  const { setCurrentEntry, setSearchFilters } = useAppStore()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
@@ -61,6 +62,10 @@ export function CalendarView() {
       updatedAt: new Date(),
     }
     setCurrentEntry(newEntry)
+  }
+
+  const clearFilters = () => {
+    setSearchFilters({})
   }
 
   const { daysInMonth, startingDay } = getDaysInMonth(currentDate)
@@ -195,6 +200,27 @@ export function CalendarView() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Empty state when no entries exist */}
+        {allEntries.length === 0 && (
+          <div className="xl:col-span-3">
+            <Card className="text-center py-8 sm:py-12">
+              <CardContent className="p-4 sm:p-6">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+                  <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-base sm:text-lg font-semibold mb-2">No entries yet</h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-4">
+                  Start your journaling journey by creating your first entry
+                </p>
+                <Button onClick={handleNewEntry} className="gap-1 sm:gap-2 text-sm sm:text-base">
+                  <Plus className="h-4 w-4" />
+                  Write Your First Entry
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Selected date entries */}
         <div>

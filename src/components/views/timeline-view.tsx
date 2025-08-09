@@ -20,7 +20,8 @@ import {
 
 export function TimelineView() {
   const entries = useFilteredEntries()
-  const { setCurrentEntry, updateEntry, deleteEntry } = useAppStore()
+  const allEntries = useEntries()
+  const { setCurrentEntry, updateEntry, deleteEntry, setSearchFilters } = useAppStore()
   const [selectedEntry, setSelectedEntry] = useState<string | null>(null)
 
   const handleNewEntry = () => {
@@ -53,6 +54,10 @@ export function TimelineView() {
     updateEntry(entryId, { isHighlight: !currentHighlight })
   }
 
+  const clearFilters = () => {
+    setSearchFilters({})
+  }
+
   const getEntryPreview = (content: string) => {
     return content.length > 150 ? content.substring(0, 150) + '...' : content
   }
@@ -81,14 +86,26 @@ export function TimelineView() {
               <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
                 <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold mb-2">No entries yet</h3>
+              <h3 className="text-base sm:text-lg font-semibold mb-2">
+                {allEntries.length === 0 ? "No entries yet" : "No entries match your filters"}
+              </h3>
               <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                Start your journaling journey by creating your first entry
+                {allEntries.length === 0 
+                  ? "Start your journaling journey by creating your first entry"
+                  : "Try clearing your search filters to see all entries"
+                }
               </p>
-              <Button onClick={handleNewEntry} className="gap-1 sm:gap-2 text-sm sm:text-base">
-                <Plus className="h-4 w-4" />
-                Write Your First Entry
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
+                <Button onClick={handleNewEntry} className="gap-1 sm:gap-2 text-sm sm:text-base">
+                  <Plus className="h-4 w-4" />
+                  {allEntries.length === 0 ? "Write Your First Entry" : "Create New Entry"}
+                </Button>
+                {allEntries.length > 0 && (
+                  <Button onClick={clearFilters} variant="outline" className="gap-1 sm:gap-2 text-sm sm:text-base">
+                    Show All Entries
+                  </Button>
+                )}
+              </div>
             </CardContent>
           </Card>
         ) : (

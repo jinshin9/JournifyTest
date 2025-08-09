@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAppStore } from '@/store'
@@ -13,7 +13,8 @@ import {
   Sun, 
   Menu,
   User,
-  LogOut
+  LogOut,
+  X
 } from 'lucide-react'
 
 export function Header() {
@@ -25,12 +26,22 @@ export function Header() {
     searchFilters,
     setSearchFilters 
   } = useAppStore()
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState(searchFilters.searchTerm || '')
 
   const handleSearch = (value: string) => {
     setSearchValue(value)
     setSearchFilters({ ...searchFilters, searchTerm: value })
   }
+
+  const clearSearch = () => {
+    setSearchValue('')
+    setSearchFilters({ ...searchFilters, searchTerm: undefined })
+  }
+
+  // Sync search value when filters change
+  useEffect(() => {
+    setSearchValue(searchFilters.searchTerm || '')
+  }, [searchFilters.searchTerm])
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -68,9 +79,27 @@ export function Header() {
               placeholder="Search entries..."
               value={searchValue}
               onChange={(e) => handleSearch(e.target.value)}
-              className="pl-8 sm:pl-10 text-sm"
+              className={cn(
+                "pl-8 sm:pl-10 text-sm",
+                searchValue && "border-blue-500 bg-blue-50/50 dark:bg-blue-950/20"
+              )}
             />
+            {searchValue && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={clearSearch}
+                className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 sm:h-7 sm:w-7"
+              >
+                <X className="h-3 w-3 sm:h-4 sm:w-4" />
+              </Button>
+            )}
           </div>
+          {searchValue && (
+            <div className="text-xs text-blue-600 dark:text-blue-400 mt-1 text-center">
+              Filtering entries...
+            </div>
+          )}
         </div>
 
         {/* Right side */}
