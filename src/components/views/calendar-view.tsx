@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useFilteredEntries, useAppStore } from '@/store'
+import { useFilteredEntries, useEntries, useAppStore } from '@/store'
 import { formatDate, getMoodIcon, getMoodColor } from '@/lib/utils'
 import { Calendar, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 
