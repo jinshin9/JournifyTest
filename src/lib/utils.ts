@@ -5,24 +5,48 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: Date | string): string {
+  // Handle both Date objects and date strings
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  
+  // Check if the date is valid
+  if (isNaN(dateObj.getTime())) {
+    return 'Invalid date'
+  }
+  
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(date)
+  }).format(dateObj)
 }
 
-export function formatTime(date: Date): string {
+export function formatTime(date: Date | string): string {
+  // Handle both Date objects and date strings
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  
+  // Check if the date is valid
+  if (isNaN(dateObj.getTime())) {
+    return 'Invalid time'
+  }
+  
   return new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
-  }).format(date)
+  }).format(dateObj)
 }
 
-export function getRelativeTime(date: Date): string {
+export function getRelativeTime(date: Date | string): string {
+  // Handle both Date objects and date strings
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  
+  // Check if the date is valid
+  if (isNaN(dateObj.getTime())) {
+    return 'Invalid date'
+  }
+  
   const now = new Date()
-  const diffInMs = now.getTime() - date.getTime()
+  const diffInMs = now.getTime() - dateObj.getTime()
   const diffInMinutes = Math.floor(diffInMs / (1000 * 60))
   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
   const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
@@ -32,7 +56,7 @@ export function getRelativeTime(date: Date): string {
   if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`
   if (diffInDays < 7) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
   
-  return formatDate(date)
+  return formatDate(dateObj)
 }
 
 export function generateId(): string {

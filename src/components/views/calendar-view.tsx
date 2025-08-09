@@ -85,7 +85,7 @@ export function CalendarView() {
         <div
           key={day}
           className={`
-            h-24 border border-border p-2 cursor-pointer transition-colors
+            h-20 sm:h-24 border border-border p-1 sm:p-2 cursor-pointer transition-colors
             ${isToday ? 'bg-blue-50 dark:bg-blue-950/20' : ''}
             ${isSelected ? 'ring-2 ring-blue-500' : ''}
             hover:bg-muted/50
@@ -93,11 +93,11 @@ export function CalendarView() {
           onClick={() => setSelectedDate(date)}
         >
           <div className="flex items-center justify-between mb-1">
-            <span className={`text-sm font-medium ${isToday ? 'text-blue-600 dark:text-blue-400' : ''}`}>
+            <span className={`text-xs sm:text-sm font-medium ${isToday ? 'text-blue-600 dark:text-blue-400' : ''}`}>
               {day}
             </span>
             {dayEntries.length > 0 && (
-              <span className="text-xs bg-primary text-primary-foreground rounded-full px-1.5 py-0.5">
+              <span className="text-xs bg-primary text-primary-foreground rounded-full px-1 py-0.5">
                 {dayEntries.length}
               </span>
             )}
@@ -118,7 +118,7 @@ export function CalendarView() {
                 </span>
               )}
               <span className="ml-1 truncate">
-                {entry.title || entry.content.substring(0, 20)}
+                {entry.title || entry.content.substring(0, 15)}
               </span>
             </div>
           ))}
@@ -138,33 +138,34 @@ export function CalendarView() {
   const selectedDateEntries = selectedDate ? getEntriesForDate(selectedDate) : []
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-3 sm:p-4 md:p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Calendar</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Calendar</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Browse your journal entries by date
           </p>
         </div>
-        <Button onClick={handleNewEntry} className="gap-2">
+        <Button onClick={handleNewEntry} className="gap-1 sm:gap-2 text-sm sm:text-base">
           <Plus className="h-4 w-4" />
-          New Entry
+          <span className="hidden sm:inline">New Entry</span>
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6">
         {/* Calendar */}
-        <div className="lg:col-span-2">
+        <div className="xl:col-span-2">
           <Card>
-            <CardHeader>
+            <CardHeader className="p-3 sm:p-4 md:p-6">
               <div className="flex items-center justify-between">
-                <CardTitle>{monthName}</CardTitle>
-                <div className="flex items-center gap-2">
+                <CardTitle className="text-base sm:text-lg">{monthName}</CardTitle>
+                <div className="flex items-center gap-1 sm:gap-2">
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => navigateMonth('prev')}
+                    className="h-8 w-8"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
@@ -172,17 +173,18 @@ export function CalendarView() {
                     variant="ghost"
                     size="icon"
                     onClick={() => navigateMonth('next')}
+                    className="h-8 w-8"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 sm:p-4 md:p-6">
               <div className="grid grid-cols-7 gap-1">
                 {/* Day headers */}
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                  <div key={day} className="h-8 flex items-center justify-center text-sm font-medium text-muted-foreground">
+                  <div key={day} className="h-6 sm:h-8 flex items-center justify-center text-xs sm:text-sm font-medium text-muted-foreground">
                     {day}
                   </div>
                 ))}

@@ -29,7 +29,7 @@ export default function HomePage() {
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
         
-        <div className="flex flex-col flex-1 overflow-hidden">
+        <div className="flex flex-col flex-1 overflow-hidden lg:ml-64 xl:ml-72">
           <Header />
           
           <main className="flex-1 overflow-y-auto">

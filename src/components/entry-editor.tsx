@@ -178,106 +178,107 @@ export function EntryEditor() {
   if (!currentEntry) return null
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
+    <div className="container mx-auto p-3 sm:p-4 md:p-6 max-w-4xl min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={handleCancel}
             title="Cancel (Esc)"
+            className="flex-shrink-0"
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground truncate">
               {currentEntry.id ? 'Edit Entry' : 'New Entry'}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-muted-foreground truncate">
               {formatDate(currentEntry.createdAt)}
             </p>
           </div>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsHighlight(!isHighlight)}
-            className={isHighlight ? 'text-yellow-500' : ''}
+            className={`flex-shrink-0 ${isHighlight ? 'text-yellow-500' : ''}`}
           >
             {isHighlight ? (
-              <StarFilled className="h-5 w-5 fill-yellow-500" />
+              <StarFilled className="h-4 w-4 sm:h-5 sm:w-5 fill-yellow-500" />
             ) : (
-              <Star className="h-5 w-5" />
+              <Star className="h-4 w-4 sm:h-5 sm:w-5" />
             )}
           </Button>
-          <Button onClick={handleSave} className="gap-2">
+          <Button onClick={handleSave} className="gap-1 sm:gap-2 text-sm sm:text-base">
             <Save className="h-4 w-4" />
-            Save
-            <span className="text-xs opacity-60">⌘S</span>
+            <span className="hidden sm:inline">Save</span>
+            <span className="text-xs opacity-60 hidden md:inline">⌘S</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 sm:gap-6">
         {/* Main Editor */}
-        <div className="lg:col-span-3">
+        <div className="xl:col-span-3">
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-4 md:p-6">
               {/* Title */}
-              <div className="mb-6">
+              <div className="mb-4 sm:mb-6">
                 <Input
                   placeholder="Entry title (optional)"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="text-xl font-semibold border-none p-0 focus-visible:ring-0"
+                  className="text-lg sm:text-xl font-semibold border-none p-0 focus-visible:ring-0"
                 />
               </div>
 
               {/* Content */}
-              <div className="mb-6">
+              <div className="mb-4 sm:mb-6">
                 <textarea
                   placeholder="Start writing your journal entry..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full min-h-[400px] resize-none border-none outline-none text-foreground bg-transparent text-base leading-relaxed"
+                  className="w-full min-h-[300px] sm:min-h-[400px] resize-none border-none outline-none text-foreground bg-transparent text-sm sm:text-base leading-relaxed"
                   style={{ fontFamily: 'inherit' }}
                 />
               </div>
 
               {/* Toolbar */}
-              <div className="flex items-center gap-2 pt-4 border-t">
+              <div className="flex flex-wrap items-center gap-1 sm:gap-2 pt-4 border-t">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={startRecording}
                   disabled={isRecording}
-                  className="gap-2"
+                  className="gap-1 sm:gap-2 text-xs sm:text-sm"
                 >
-                  <Mic className="h-4 w-4" />
-                  {isRecording ? 'Recording...' : 'Voice'}
+                  <Mic className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">{isRecording ? 'Recording...' : 'Voice'}</span>
                 </Button>
                 
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleImageUpload}
-                  className="gap-2"
+                  className="gap-1 sm:gap-2 text-xs sm:text-sm"
                 >
-                  <Image className="h-4 w-4" />
-                  Image
+                  <Image className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Image</span>
                 </Button>
                 
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowPrompts(!showPrompts)}
-                  className="gap-2"
+                  className="gap-1 sm:gap-2 text-xs sm:text-sm"
                 >
-                  <Sparkles className="h-4 w-4" />
-                  AI Prompts
+                  <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">AI Prompts</span>
                 </Button>
               </div>
             </CardContent>
@@ -285,23 +286,23 @@ export function EntryEditor() {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Mood Selector */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">How are you feeling?</CardTitle>
+            <CardHeader className="p-3 sm:p-4 md:p-6">
+              <CardTitle className="text-base sm:text-lg">How are you feeling?</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-2">
+            <CardContent className="p-3 sm:p-4 md:p-6">
+              <div className="grid grid-cols-2 gap-1 sm:gap-2">
                 {moods.map((mood) => (
                   <Button
                     key={mood.value}
                     variant={selectedMood === mood.value ? "default" : "outline"}
-                    className="h-12 justify-start gap-2"
+                    className="h-10 sm:h-12 justify-start gap-1 sm:gap-2 text-xs sm:text-sm"
                     onClick={() => handleMoodSelect(mood.value)}
                   >
-                    <span className="text-lg">{mood.icon}</span>
-                    <span className="text-sm">{mood.label}</span>
+                    <span className="text-base sm:text-lg">{mood.icon}</span>
+                    <span className="hidden sm:inline">{mood.label}</span>
                   </Button>
                 ))}
               </div>
@@ -310,51 +311,56 @@ export function EntryEditor() {
 
           {/* Tags */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center justify-between">
+            <CardHeader className="p-3 sm:p-4 md:p-6">
+              <CardTitle className="text-base sm:text-lg flex items-center justify-between">
                 Tags
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowTagInput(!showTagInput)}
+                  className="h-8 w-8 p-0"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 sm:p-4 md:p-6">
               {showTagInput && (
-                <div className="mb-4 flex gap-2">
+                <div className="mb-4 flex flex-col sm:flex-row gap-2">
                   <Input
                     placeholder="New tag name"
                     value={newTagName}
                     onChange={(e) => setNewTagName(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
+                    className="text-sm"
                   />
-                  <Button size="sm" onClick={handleAddTag}>
-                    Add
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowTagInput(false)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-1">
+                    <Button size="sm" onClick={handleAddTag} className="text-xs">
+                      Add
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowTagInput(false)}
+                      className="h-8 w-8 p-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               )}
               
-              <div className="space-y-2">
+              <div className="space-y-1 sm:space-y-2">
                 {tags.map((tag) => (
                   <Button
                     key={tag.id}
                     variant={selectedTags.find(t => t.id === tag.id) ? "default" : "outline"}
                     size="sm"
-                    className="w-full justify-start gap-2"
+                    className="w-full justify-start gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9"
                     onClick={() => handleTagToggle(tag)}
                   >
                     <Tag className="h-3 w-3" />
-                    {tag.name}
+                    <span className="truncate">{tag.name}</span>
                   </Button>
                 ))}
                 
@@ -365,12 +371,12 @@ export function EntryEditor() {
                       {selectedTags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-primary text-primary-foreground rounded-md"
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-primary text-primary-foreground rounded-md max-w-full"
                         >
-                          {tag.name}
+                          <span className="truncate">{tag.name}</span>
                           <button
                             onClick={() => handleTagToggle(tag)}
-                            className="hover:text-destructive"
+                            className="hover:text-destructive flex-shrink-0"
                           >
                             <X className="h-3 w-3" />
                           </button>
@@ -386,23 +392,23 @@ export function EntryEditor() {
           {/* AI Prompts */}
           {showPrompts && (
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Sparkles className="h-5 w-5" />
+              <CardHeader className="p-3 sm:p-4 md:p-6">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                   AI Prompts
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <div className="space-y-1 sm:space-y-2">
                   {aiPrompts.map((prompt, index) => (
                     <Button
                       key={index}
                       variant="outline"
                       size="sm"
-                      className="w-full justify-start text-left h-auto p-3"
+                      className="w-full justify-start text-left h-auto p-2 sm:p-3 text-xs sm:text-sm"
                       onClick={() => handlePromptSelect(prompt)}
                     >
-                      {prompt}
+                      <span className="line-clamp-2">{prompt}</span>
                     </Button>
                   ))}
                 </div>

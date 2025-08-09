@@ -67,61 +67,64 @@ export function GridView() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-3 sm:p-4 md:p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Grid View</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Grid View</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Visual grid layout of your journal entries
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           {/* Grid size controls */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Button
               variant={gridSize === 'small' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setGridSize('small')}
+              className="h-8 w-8 p-0"
             >
-              <Grid3X3 className="h-4 w-4" />
+              <Grid3X3 className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
             <Button
               variant={gridSize === 'medium' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setGridSize('medium')}
+              className="h-8 w-8 p-0"
             >
-              <Grid3X3 className="h-4 w-4" />
+              <Grid3X3 className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
             <Button
               variant={gridSize === 'large' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setGridSize('large')}
+              className="h-8 w-8 p-0"
             >
-              <Grid3X3 className="h-4 w-4" />
+              <Grid3X3 className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
           </div>
-          <Button onClick={handleNewEntry} className="gap-2">
+          <Button onClick={handleNewEntry} className="gap-1 sm:gap-2 text-sm sm:text-base">
             <Plus className="h-4 w-4" />
-            New Entry
+            <span className="hidden sm:inline">New Entry</span>
           </Button>
         </div>
       </div>
 
       {/* Grid */}
-      <div className={cn("grid gap-4", getGridCols())}>
+      <div className={cn("grid gap-3 sm:gap-4", getGridCols())}>
         {entries.length === 0 ? (
           <div className="col-span-full">
-            <Card className="text-center py-12">
-              <CardContent>
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
-                  <Grid3X3 className="h-8 w-8 text-muted-foreground" />
+            <Card className="text-center py-8 sm:py-12">
+              <CardContent className="p-4 sm:p-6">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+                  <Grid3X3 className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No entries yet</h3>
-                <p className="text-muted-foreground mb-4">
+                <h3 className="text-base sm:text-lg font-semibold mb-2">No entries yet</h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-4">
                   Start your journaling journey by creating your first entry
                 </p>
-                <Button onClick={handleNewEntry} className="gap-2">
+                <Button onClick={handleNewEntry} className="gap-1 sm:gap-2 text-sm sm:text-base">
                   <Plus className="h-4 w-4" />
                   Write Your First Entry
                 </Button>
