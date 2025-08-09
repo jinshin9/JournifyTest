@@ -60,20 +60,19 @@ const initialState = {
   currentView: 'timeline' as const,
   searchFilters: {},
   settings: {
-    theme: 'system',
+    theme: 'system' as const,
     notifications: true,
     dailyReminder: true,
     reminderTime: '20:00',
-    privacyLevel: 'private',
+    privacyLevel: 'private' as const,
     autoSave: true,
   },
 }
 
 export const useAppStore = create<AppState>()(
   persist(
-    (set, get) => {
-      return {
-        ...initialState,
+    (set, get) => ({
+      ...initialState,
       
       setUser: (user) => set({ user }),
       setAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
@@ -195,7 +194,7 @@ export const useAppStore = create<AppState>()(
     }
   )
 )
-
+  
 // Selectors for better performance
 export const useEntries = () => useAppStore((state) => state.entries)
 export const useCurrentEntry = () => useAppStore((state) => state.currentEntry)
