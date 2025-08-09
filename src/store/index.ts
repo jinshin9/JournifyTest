@@ -72,8 +72,55 @@ const initialState = {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => {
-      // Initialize with sample data if empty
-      const initializeSampleData = () => {
+      return {
+        ...initialState,
+      
+      setUser: (user) => set({ user }),
+      setAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
+      
+      setEntries: (entries) => set({ entries }),
+      addEntry: (entry) => set((state) => ({ 
+        entries: [entry, ...state.entries] 
+      })),
+      updateEntry: (id, updates) => set((state) => ({
+        entries: state.entries.map(entry => 
+          entry.id === id ? { ...entry, ...updates } : entry
+        ),
+        currentEntry: state.currentEntry?.id === id 
+          ? { ...state.currentEntry, ...updates }
+          : state.currentEntry
+      })),
+      deleteEntry: (id) => set((state) => ({
+        entries: state.entries.filter(entry => entry.id !== id),
+        currentEntry: state.currentEntry?.id === id ? null : state.currentEntry
+      })),
+      setCurrentEntry: (entry) => set({ currentEntry: entry }),
+      setLoading: (loading) => set({ isLoading: loading }),
+      
+      setTags: (tags) => set({ tags }),
+      addTag: (tag) => set((state) => ({ 
+        tags: [...state.tags, tag] 
+      })),
+      updateTag: (id, updates) => set((state) => ({
+        tags: state.tags.map(tag => 
+          tag.id === id ? { ...tag, ...updates } : tag
+        )
+      })),
+      deleteTag: (id) => set((state) => ({
+        tags: state.tags.filter(tag => tag.id !== id)
+      })),
+      
+      setTheme: (theme) => set({ theme }),
+      setSidebarOpen: (open) => set({ sidebarOpen: open }),
+      setCurrentView: (view) => set({ currentView: view }),
+      setSearchFilters: (filters) => set({ searchFilters: filters }),
+      
+      updateSettings: (settings) => set((state) => ({
+        settings: { ...state.settings, ...settings }
+      })),
+      
+      resetState: () => set(initialState),
+      initializeSampleData: () => {
         const state = get()
         if (state.entries.length === 0 && state.tags.length === 0) {
           const sampleTags: Tag[] = [
@@ -132,57 +179,7 @@ export const useAppStore = create<AppState>()(
 
           set({ entries: sampleEntries, tags: sampleTags })
         }
-      }
-
-      return {
-        ...initialState,
-      
-      setUser: (user) => set({ user }),
-      setAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
-      
-      setEntries: (entries) => set({ entries }),
-      addEntry: (entry) => set((state) => ({ 
-        entries: [entry, ...state.entries] 
-      })),
-      updateEntry: (id, updates) => set((state) => ({
-        entries: state.entries.map(entry => 
-          entry.id === id ? { ...entry, ...updates } : entry
-        ),
-        currentEntry: state.currentEntry?.id === id 
-          ? { ...state.currentEntry, ...updates }
-          : state.currentEntry
-      })),
-      deleteEntry: (id) => set((state) => ({
-        entries: state.entries.filter(entry => entry.id !== id),
-        currentEntry: state.currentEntry?.id === id ? null : state.currentEntry
-      })),
-      setCurrentEntry: (entry) => set({ currentEntry: entry }),
-      setLoading: (loading) => set({ isLoading: loading }),
-      
-      setTags: (tags) => set({ tags }),
-      addTag: (tag) => set((state) => ({ 
-        tags: [...state.tags, tag] 
-      })),
-      updateTag: (id, updates) => set((state) => ({
-        tags: state.tags.map(tag => 
-          tag.id === id ? { ...tag, ...updates } : tag
-        )
-      })),
-      deleteTag: (id) => set((state) => ({
-        tags: state.tags.filter(tag => tag.id !== id)
-      })),
-      
-      setTheme: (theme) => set({ theme }),
-      setSidebarOpen: (open) => set({ sidebarOpen: open }),
-      setCurrentView: (view) => set({ currentView: view }),
-      setSearchFilters: (filters) => set({ searchFilters: filters }),
-      
-      updateSettings: (settings) => set((state) => ({
-        settings: { ...state.settings, ...settings }
-      })),
-      
-      resetState: () => set(initialState),
-      initializeSampleData,
+      },
     }),
     {
       name: 'journify-storage',
