@@ -78,9 +78,21 @@ export const useAppStore = create<AppState>()(
       setAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
       
       setEntries: (entries) => set({ entries }),
-      addEntry: (entry) => set((state) => ({ 
-        entries: [entry, ...state.entries] 
-      })),
+      addEntry: (entry) => {
+        console.log('Adding entry to store:', entry)
+        try {
+          set((state) => {
+            const newState = { 
+              entries: [entry, ...state.entries] 
+            }
+            console.log('New entries state:', newState.entries)
+            return newState
+          })
+          console.log('Store updated successfully')
+        } catch (error) {
+          console.error('Error updating store:', error)
+        }
+      },
       updateEntry: (id, updates) => set((state) => ({
         entries: state.entries.map(entry => 
           entry.id === id ? { ...entry, ...updates } : entry
@@ -220,7 +232,10 @@ export const useFilteredEntries = () => {
   const entries = useEntries()
   const filters = useSearchFilters()
   
-  return entries.filter(entry => {
+  console.log('useFilteredEntries - all entries:', entries.length)
+  console.log('useFilteredEntries - current filters:', filters)
+  
+  const filtered = entries.filter(entry => {
     // Search term filter
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase()
@@ -255,4 +270,7 @@ export const useFilteredEntries = () => {
     
     return true
   })
+  
+  console.log('useFilteredEntries - filtered entries:', filtered.length)
+  return filtered
 } 

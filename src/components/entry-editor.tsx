@@ -68,6 +68,8 @@ export function EntryEditor() {
   const handleSave = () => {
     if (!currentEntry) return
 
+    console.log('Current entry before save:', currentEntry)
+
     // Validate that the entry has content
     if (!content.trim()) {
       toast({
@@ -80,6 +82,7 @@ export function EntryEditor() {
 
     const updatedEntry = {
       ...currentEntry,
+      id: currentEntry.id || Date.now().toString(), // Ensure new entries get an id
       title: title.trim(),
       content: content.trim(),
       mood: selectedMood,
@@ -88,16 +91,30 @@ export function EntryEditor() {
       updatedAt: new Date(),
     }
 
+    console.log('Saving entry:', updatedEntry)
+    console.log('currentEntry.id:', currentEntry.id)
+    console.log('Will go to updateEntry branch:', !!currentEntry.id)
+
     if (currentEntry.id) {
+      console.log('Going to updateEntry branch')
       updateEntry(currentEntry.id, updatedEntry)
       toast({
         title: "Entry Updated",
         description: "Your journal entry has been successfully updated.",
       })
     } else {
-      addEntry(updatedEntry)
+      console.log('Going to addEntry branch')
+      console.log('About to call addEntry with:', updatedEntry)
+      console.log('addEntry function:', addEntry)
+      try {
+        addEntry(updatedEntry)
+        console.log('addEntry called successfully')
+      } catch (error) {
+        console.error('Error calling addEntry:', error)
+      }
       // Clear search filters so the new entry is visible
       setSearchFilters({})
+      console.log('Entry added, search filters cleared')
       toast({
         title: "Entry Saved",
         description: "Your journal entry has been successfully saved.",

@@ -50,7 +50,6 @@ export function CalendarView() {
 
   const handleNewEntry = () => {
     const newEntry = {
-      id: Date.now().toString(),
       userId: 'user-1',
       title: '',
       content: '',
