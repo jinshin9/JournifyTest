@@ -31,7 +31,12 @@ export function CalendarView() {
 
   const getEntriesForDate = (date: Date) => {
     return entries.filter(entry => {
-      const entryDate = new Date(entry.createdAt)
+      // Handle both Date objects and date strings from localStorage
+      const entryDate = entry.createdAt instanceof Date ? entry.createdAt : new Date(entry.createdAt)
+      // Check if the date is valid before comparing
+      if (isNaN(entryDate.getTime())) {
+        return false
+      }
       return entryDate.toDateString() === date.toDateString()
     })
   }

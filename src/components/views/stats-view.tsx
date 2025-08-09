@@ -19,13 +19,15 @@ export function StatsView() {
     // Calculate current streak
     let currentStreak = 0
     const today = new Date()
-    const sortedEntries = [...entries].sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
+    const sortedEntries = [...entries].sort((a, b) => {
+      const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt)
+      const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt)
+      return dateB.getTime() - dateA.getTime()
+    })
     
     let currentDate = new Date(today)
     for (const entry of sortedEntries) {
-      const entryDate = new Date(entry.createdAt)
+      const entryDate = entry.createdAt instanceof Date ? entry.createdAt : new Date(entry.createdAt)
       const diffTime = Math.abs(currentDate.getTime() - entryDate.getTime())
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
       
