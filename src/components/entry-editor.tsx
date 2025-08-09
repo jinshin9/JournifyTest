@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAppStore } from '@/store'
+import { useToast } from '@/hooks/use-toast'
 import { cn, formatDate, getMoodIcon, getMoodColor } from '@/lib/utils'
 import { 
   ArrowLeft,
@@ -43,6 +44,7 @@ const aiPrompts = [
 
 export function EntryEditor() {
   const { currentEntry, updateEntry, setCurrentEntry, addEntry, tags } = useAppStore()
+  const { toast } = useToast()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [selectedMood, setSelectedMood] = useState<Mood | undefined>()
@@ -66,6 +68,16 @@ export function EntryEditor() {
   const handleSave = () => {
     if (!currentEntry) return
 
+    // Validate that the entry has content
+    if (!content.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Please add some content to your entry before saving.",
+        variant: "destructive",
+      })
+      return
+    }
+
     const updatedEntry = {
       ...currentEntry,
       title: title.trim(),
@@ -78,12 +90,39 @@ export function EntryEditor() {
 
     if (currentEntry.id) {
       updateEntry(currentEntry.id, updatedEntry)
+      toast({
+        title: "Entry Updated",
+        description: "Your journal entry has been successfully updated.",
+      })
     } else {
       addEntry(updatedEntry)
+      toast({
+        title: "Entry Saved",
+        description: "Your journal entry has been successfully saved.",
+      })
     }
 
     setCurrentEntry(null)
   }
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey) {
+        if (e.key === 's') {
+          e.preventDefault()
+          handleSave()
+        }
+        if (e.key === 'Escape') {
+          e.preventDefault()
+          handleCancel()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [content, title, selectedMood, selectedTags, isHighlight])
 
   const handleCancel = () => {
     setCurrentEntry(null)
@@ -147,6 +186,7 @@ export function EntryEditor() {
             variant="ghost"
             size="icon"
             onClick={handleCancel}
+            title="Cancel (Esc)"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
@@ -176,6 +216,7 @@ export function EntryEditor() {
           <Button onClick={handleSave} className="gap-2">
             <Save className="h-4 w-4" />
             Save
+            <span className="text-xs opacity-60">⌘S</span>
           </Button>
         </div>
       </div>

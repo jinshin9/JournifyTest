@@ -3,14 +3,19 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useFilteredEntries } from '@/store'
+import { useFilteredEntries, useAppStore } from '@/store'
 import { formatDate, getMoodIcon, getMoodColor } from '@/lib/utils'
 import { Calendar, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 
 export function CalendarView() {
   const entries = useFilteredEntries()
+  const { setCurrentEntry } = useAppStore()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+
+  const handleEditEntry = (entry: any) => {
+    setCurrentEntry(entry)
+  }
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear()
@@ -40,6 +45,22 @@ export function CalendarView() {
       }
       return newDate
     })
+  }
+
+  const handleNewEntry = () => {
+    const newEntry = {
+      id: Date.now().toString(),
+      userId: 'user-1',
+      title: '',
+      content: '',
+      mood: undefined,
+      tags: [],
+      isHighlight: false,
+      attachments: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+    setCurrentEntry(newEntry)
   }
 
   const { daysInMonth, startingDay } = getDaysInMonth(currentDate)
@@ -83,7 +104,14 @@ export function CalendarView() {
           </div>
           
           {dayEntries.slice(0, 2).map((entry, index) => (
-            <div key={entry.id} className="text-xs truncate mb-1">
+            <div 
+              key={entry.id} 
+              className="text-xs truncate mb-1 cursor-pointer hover:bg-muted/30 px-1 rounded"
+              onClick={(e) => {
+                e.stopPropagation()
+                handleEditEntry(entry)
+              }}
+            >
               {entry.mood && (
                 <span className={getMoodColor(entry.mood)}>
                   {getMoodIcon(entry.mood)}
@@ -119,7 +147,7 @@ export function CalendarView() {
             Browse your journal entries by date
           </p>
         </div>
-        <Button className="gap-2">
+        <Button onClick={handleNewEntry} className="gap-2">
           <Plus className="h-4 w-4" />
           New Entry
         </Button>
@@ -179,7 +207,11 @@ export function CalendarView() {
                 selectedDateEntries.length > 0 ? (
                   <div className="space-y-3">
                     {selectedDateEntries.map(entry => (
-                      <div key={entry.id} className="p-3 border rounded-lg">
+                      <div 
+                        key={entry.id} 
+                        className="p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                        onClick={() => handleEditEntry(entry)}
+                      >
                         <div className="flex items-center gap-2 mb-2">
                           {entry.mood && (
                             <span className={getMoodColor(entry.mood)}>

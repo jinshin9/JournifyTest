@@ -45,6 +45,7 @@ interface AppState {
   setSearchFilters: (filters: SearchFilters) => void
   updateSettings: (settings: Partial<AppSettings>) => void
   resetState: () => void
+  initializeSampleData: () => void
 }
 
 const initialState = {
@@ -70,8 +71,71 @@ const initialState = {
 
 export const useAppStore = create<AppState>()(
   persist(
-    (set, get) => ({
-      ...initialState,
+    (set, get) => {
+      // Initialize with sample data if empty
+      const initializeSampleData = () => {
+        const state = get()
+        if (state.entries.length === 0 && state.tags.length === 0) {
+          const sampleTags: Tag[] = [
+            {
+              id: '1',
+              name: 'Gratitude',
+              type: 'hashtag',
+              color: '#10B981',
+              userId: 'user-1',
+              createdAt: new Date(),
+            },
+            {
+              id: '2',
+              name: 'Work',
+              type: 'hashtag',
+              color: '#3B82F6',
+              userId: 'user-1',
+              createdAt: new Date(),
+            },
+            {
+              id: '3',
+              name: 'Personal',
+              type: 'hashtag',
+              color: '#8B5CF6',
+              userId: 'user-1',
+              createdAt: new Date(),
+            },
+          ]
+
+          const sampleEntries: JournalEntry[] = [
+            {
+              id: '1',
+              userId: 'user-1',
+              title: 'My First Journal Entry',
+              content: 'Today I started my journaling journey with Journify. I\'m excited to see how this practice will help me reflect on my daily experiences and track my personal growth over time.',
+              mood: 'excited',
+              tags: [sampleTags[0], sampleTags[2]],
+              isHighlight: true,
+              attachments: [],
+              createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+              updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+            },
+            {
+              id: '2',
+              userId: 'user-1',
+              title: 'Work Progress',
+              content: 'Made significant progress on the project today. The team collaboration was excellent and we achieved our sprint goals ahead of schedule. Feeling accomplished and motivated for the next phase.',
+              mood: 'happy',
+              tags: [sampleTags[1]],
+              isHighlight: false,
+              attachments: [],
+              createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+              updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+            },
+          ]
+
+          set({ entries: sampleEntries, tags: sampleTags })
+        }
+      }
+
+      return {
+        ...initialState,
       
       setUser: (user) => set({ user }),
       setAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
@@ -118,6 +182,7 @@ export const useAppStore = create<AppState>()(
       })),
       
       resetState: () => set(initialState),
+      initializeSampleData,
     }),
     {
       name: 'journify-storage',
@@ -127,6 +192,8 @@ export const useAppStore = create<AppState>()(
         sidebarOpen: state.sidebarOpen,
         currentView: state.currentView,
         searchFilters: state.searchFilters,
+        entries: state.entries,
+        tags: state.tags,
       }),
     }
   )

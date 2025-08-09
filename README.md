@@ -43,6 +43,41 @@ Journify is an AI journaling app for busy, growth-minded individuals to write da
 - npm or yarn
 - Supabase account (for database)
 
+### How to Use Entry Functionality
+
+1. **Creating a New Entry**
+   - Click the "New Entry" button in any view (Timeline, Calendar, or Grid)
+   - Or use the sidebar navigation to create a new entry
+   - The entry editor will open with a blank canvas
+
+2. **Writing Your Entry**
+   - Add a title (optional) at the top
+   - Write your content in the main text area
+   - Use AI prompts for inspiration (click the "AI Prompts" button)
+   - Add voice notes using the "Voice" button (simulated)
+
+3. **Adding Metadata**
+   - Select your mood using the emoji buttons in the sidebar
+   - Add tags by clicking on existing tags or creating new ones
+   - Mark as highlight using the star button in the header
+
+4. **Saving Your Entry**
+   - Click the "Save" button or use ⌘S (Cmd+S on Mac, Ctrl+S on Windows)
+   - Entries require content before they can be saved
+   - Toast notifications will confirm successful save/update
+
+5. **Viewing Your Entries**
+   - **Timeline View**: Chronological list of all entries
+   - **Calendar View**: Browse entries by date, click on dates to see entries
+   - **Grid View**: Visual card layout with different size options
+   - Click on any entry to edit it
+
+6. **Managing Entries**
+   - Edit entries by clicking the edit button or clicking on the entry
+   - Delete entries using the trash button
+   - Toggle highlights using the star button
+   - Filter entries using the search and filter options
+
 ### Installation
 
 1. **Clone the repository**
@@ -205,12 +240,14 @@ journify/
 
 ### EntryEditor
 The heart of the app, featuring:
-- Rich text editing
+- Rich text editing with auto-save
 - Mood selection with emoji indicators
-- Tag management
-- AI prompt integration
+- Tag management with custom tag creation
+- AI prompt integration for writing inspiration
 - Speech-to-text simulation
 - Image upload capability
+- Keyboard shortcuts (⌘S to save, Esc to cancel)
+- Toast notifications for user feedback
 
 ### TimelineView
 Chronological view of journal entries with:
