@@ -9,7 +9,7 @@ interface AppState {
   
   // Entries state
   entries: JournalEntry[]
-  currentEntry: JournalEntry | null
+  currentEntry: JournalEntry | Partial<JournalEntry> | null
   isLoading: boolean
   
   // Tags state
@@ -33,7 +33,7 @@ interface AppState {
   addEntry: (entry: JournalEntry) => void
   updateEntry: (id: string, updates: Partial<JournalEntry>) => void
   deleteEntry: (id: string) => void
-  setCurrentEntry: (entry: JournalEntry | null) => void
+  setCurrentEntry: (entry: JournalEntry | Partial<JournalEntry> | null) => void
   setLoading: (loading: boolean) => void
   setTags: (tags: Tag[]) => void
   addTag: (tag: Tag) => void

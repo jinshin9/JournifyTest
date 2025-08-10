@@ -20,7 +20,7 @@ import {
   Plus,
   Trash2
 } from 'lucide-react'
-import { Mood, Tag as TagType } from '@/types'
+import { Mood, Tag as TagType, JournalEntry } from '@/types'
 
 const moods: { value: Mood; label: string; icon: string }[] = [
   { value: 'happy', label: 'Happy', icon: '😊' },
@@ -58,10 +58,10 @@ export function EntryEditor() {
   useEffect(() => {
     if (currentEntry) {
       setTitle(currentEntry.title || '')
-      setContent(currentEntry.content)
+      setContent(currentEntry.content || '')
       setSelectedMood(currentEntry.mood)
-      setSelectedTags(currentEntry.tags)
-      setIsHighlight(currentEntry.isHighlight)
+      setSelectedTags(currentEntry.tags || [])
+      setIsHighlight(currentEntry.isHighlight || false)
     }
   }, [currentEntry])
 
@@ -80,14 +80,16 @@ export function EntryEditor() {
       return
     }
 
-    const updatedEntry = {
-      ...currentEntry,
+    const updatedEntry: JournalEntry = {
       id: currentEntry.id || Date.now().toString(), // Ensure new entries get an id
+      userId: currentEntry.userId || 'user-1',
       title: title.trim(),
       content: content.trim(),
       mood: selectedMood,
       tags: selectedTags,
       isHighlight,
+      attachments: currentEntry.attachments || [],
+      createdAt: currentEntry.createdAt || new Date(),
       updatedAt: new Date(),
     }
 
@@ -215,7 +217,7 @@ export function EntryEditor() {
               {currentEntry.id ? 'Edit Entry' : 'New Entry'}
             </h1>
             <p className="text-sm text-muted-foreground truncate">
-              {formatDate(currentEntry.createdAt)}
+              {formatDate(currentEntry.createdAt || new Date())}
             </p>
           </div>
         </div>
