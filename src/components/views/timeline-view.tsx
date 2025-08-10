@@ -190,6 +190,8 @@ export function TimelineView() {
                         highlight: { label: '⭐', color: '#EF4444' }
                       }[tagType]
                       
+                      if (!typeConfig) return null
+                      
                       return (
                         <div key={tagType} className="flex flex-wrap gap-1">
                           {typeTags.map((tag) => (

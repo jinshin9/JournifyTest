@@ -404,7 +404,7 @@ export function TagManager() {
                 <Input
                   placeholder="Enter tag name"
                   value={editingTag.name || ''}
-                  onChange={(e) => setEditingTag(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) => setEditingTag(prev => prev ? { ...prev, name: e.target.value } : null)}
                 />
               </div>
               
@@ -413,7 +413,7 @@ export function TagManager() {
                 <Input
                   type="color"
                   value={editingTag.color || tagTypeConfig[editingTag.type].color}
-                  onChange={(e) => setEditingTag(prev => ({ ...prev, color: e.target.value }))}
+                  onChange={(e) => setEditingTag(prev => prev ? { ...prev, color: e.target.value } : null)}
                   className="h-10"
                 />
               </div>
@@ -424,7 +424,7 @@ export function TagManager() {
               <Input
                 placeholder="Describe what this tag is for"
                 value={editingTag.description || ''}
-                onChange={(e) => setEditingTag(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) => setEditingTag(prev => prev ? { ...prev, description: e.target.value } : null)}
               />
             </div>
             

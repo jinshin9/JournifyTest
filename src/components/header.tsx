@@ -24,7 +24,9 @@ export function Header() {
     theme, 
     setTheme,
     searchFilters,
-    setSearchFilters 
+    setSearchFilters,
+    debugStorage,
+    clearStorage
   } = useAppStore()
   const [searchValue, setSearchValue] = useState(searchFilters.searchTerm || '')
 
@@ -124,6 +126,26 @@ export function Header() {
           >
             <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 bg-red-500 rounded-full"></span>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={debugStorage}
+            className="h-8 w-8 sm:h-9 sm:w-9"
+            title="Debug Storage"
+          >
+            <span className="text-xs font-mono">D</span>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={clearStorage}
+            className="h-8 w-8 sm:h-9 sm:w-9"
+            title="Clear Storage"
+          >
+            <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
 
           <Button

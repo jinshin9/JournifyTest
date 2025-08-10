@@ -46,6 +46,8 @@ interface AppState {
   updateSettings: (settings: Partial<AppSettings>) => void
   resetState: () => void
   initializeSampleData: () => void
+  debugStorage: () => void
+  clearStorage: () => void
 }
 
 const initialState = {
@@ -132,6 +134,16 @@ export const useAppStore = create<AppState>()(
       
       resetState: () => set(initialState),
       initializeSampleData: () => {
+        const currentState = get()
+        
+        // Only initialize if there are no existing entries or tags
+        if (currentState.entries.length > 0 || currentState.tags.length > 0) {
+          console.log('Sample data already exists, skipping initialization')
+          return
+        }
+        
+        console.log('Initializing sample data...')
+        
         const sampleTags: Tag[] = [
           {
             id: '1',
@@ -263,6 +275,23 @@ export const useAppStore = create<AppState>()(
 
         set({ entries: sampleEntries, tags: sampleTags })
       },
+      debugStorage: () => {
+        const state = get()
+        console.log('Current localStorage state:')
+        console.log('User:', state.user)
+        console.log('Authenticated:', state.isAuthenticated)
+        console.log('Entries:', state.entries.length)
+        console.log('Tags:', state.tags.length)
+        console.log('Theme:', state.theme)
+        console.log('Sidebar Open:', state.sidebarOpen)
+        console.log('Current View:', state.currentView)
+        console.log('Search Filters:', state.searchFilters)
+        console.log('Settings:', state.settings)
+      },
+      clearStorage: () => {
+        localStorage.clear()
+        console.log('Local storage cleared.')
+      },
     }),
     {
       name: 'journify-storage',
@@ -275,6 +304,15 @@ export const useAppStore = create<AppState>()(
         entries: state.entries,
         tags: state.tags,
       }),
+      onRehydrateStorage: () => (state) => {
+        console.log('Store rehydrated from localStorage:', state)
+        if (state?.entries) {
+          console.log('Loaded entries from localStorage:', state.entries.length)
+        }
+        if (state?.tags) {
+          console.log('Loaded tags from localStorage:', state.tags.length)
+        }
+      },
     }
   )
 )
