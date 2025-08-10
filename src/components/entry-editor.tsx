@@ -169,6 +169,7 @@ export function EntryEditor() {
         type: 'hashtag',
         userId: 'user-1',
         createdAt: new Date(),
+        updatedAt: new Date(),
       }
       setSelectedTags(prev => [...prev, newTag])
       setNewTagName('')
@@ -371,42 +372,76 @@ export function EntryEditor() {
                 </div>
               )}
               
-              <div className="space-y-1 sm:space-y-2">
-                {tags.map((tag) => (
-                  <Button
-                    key={tag.id}
-                    variant={selectedTags.find(t => t.id === tag.id) ? "default" : "outline"}
-                    size="sm"
-                    className="w-full justify-start gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9"
-                    onClick={() => handleTagToggle(tag)}
-                  >
-                    <Tag className="h-3 w-3" />
-                    <span className="truncate">{tag.name}</span>
-                  </Button>
-                ))}
-                
-                {selectedTags.length > 0 && (
-                  <div className="pt-2 border-t">
-                    <p className="text-xs text-muted-foreground mb-2">Selected:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {selectedTags.map((tag) => (
-                        <span
-                          key={tag.id}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-primary text-primary-foreground rounded-md max-w-full"
-                        >
-                          <span className="truncate">{tag.name}</span>
-                          <button
+              {/* Tags organized by type */}
+              <div className="space-y-3">
+                {['folder', 'person', 'hashtag', 'location', 'highlight'].map((tagType) => {
+                  const typeTags = tags.filter(tag => tag.type === tagType)
+                  if (typeTags.length === 0) return null
+                  
+                  const typeConfigs = {
+                    folder: { label: 'Folders', icon: '📁', color: '#3B82F6' },
+                    person: { label: 'People', icon: '👤', color: '#10B981' },
+                    hashtag: { label: 'Topics', icon: '#', color: '#8B5CF6' },
+                    location: { label: 'Places', icon: '📍', color: '#F59E0B' },
+                    highlight: { label: 'Highlights', icon: '⭐', color: '#EF4444' }
+                  }
+                  
+                  const typeConfig = typeConfigs[tagType as keyof typeof typeConfigs]
+                  if (!typeConfig) return null
+                  
+                  return (
+                    <div key={tagType} className="space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                        <span style={{ color: typeConfig.color }}>{typeConfig.icon}</span>
+                        {typeConfig.label}
+                      </div>
+                      <div className="space-y-1">
+                        {typeTags.map((tag) => (
+                          <Button
+                            key={tag.id}
+                            variant={selectedTags.find(t => t.id === tag.id) ? "default" : "outline"}
+                            size="sm"
+                            className="w-full justify-start gap-2 text-xs h-8"
                             onClick={() => handleTagToggle(tag)}
-                            className="hover:text-destructive flex-shrink-0"
                           >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </span>
-                      ))}
+                            <div 
+                              className="w-2 h-2 rounded-full flex-shrink-0"
+                              style={{ backgroundColor: tag.color || typeConfig.color }}
+                            />
+                            <span className="truncate">{tag.name}</span>
+                          </Button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )
+                })}
               </div>
+              
+              {selectedTags.length > 0 && (
+                <div className="pt-3 border-t mt-3">
+                  <p className="text-xs text-muted-foreground mb-2">Selected:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {selectedTags.map((tag) => (
+                      <span
+                        key={tag.id}
+                        className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-primary text-primary-foreground rounded-md max-w-full"
+                      >
+                        <div 
+                          className="w-2 h-2 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: tag.color || '#6B7280' }}
+                        />
+                        <span className="truncate">{tag.name}</span>
+                        <button
+                          onClick={() => handleTagToggle(tag)}
+                          className="hover:text-destructive flex-shrink-0"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 

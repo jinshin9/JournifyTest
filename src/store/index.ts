@@ -18,7 +18,7 @@ interface AppState {
   // UI state
   theme: 'light' | 'dark' | 'system'
   sidebarOpen: boolean
-  currentView: 'timeline' | 'calendar' | 'grid' | 'stats'
+  currentView: 'timeline' | 'calendar' | 'grid' | 'stats' | 'tags'
   
   // Search and filters
   searchFilters: SearchFilters
@@ -41,7 +41,7 @@ interface AppState {
   deleteTag: (id: string) => void
   setTheme: (theme: 'light' | 'dark' | 'system') => void
   setSidebarOpen: (open: boolean) => void
-  setCurrentView: (view: 'timeline' | 'calendar' | 'grid' | 'stats') => void
+  setCurrentView: (view: 'timeline' | 'calendar' | 'grid' | 'stats' | 'tags') => void
   setSearchFilters: (filters: SearchFilters) => void
   updateSettings: (settings: Partial<AppSettings>) => void
   resetState: () => void
@@ -132,64 +132,136 @@ export const useAppStore = create<AppState>()(
       
       resetState: () => set(initialState),
       initializeSampleData: () => {
-        const state = get()
-        if (state.entries.length === 0 && state.tags.length === 0) {
-          const sampleTags: Tag[] = [
-            {
-              id: '1',
-              name: 'Gratitude',
-              type: 'hashtag',
-              color: '#10B981',
-              userId: 'user-1',
-              createdAt: new Date(),
-            },
-            {
-              id: '2',
-              name: 'Work',
-              type: 'hashtag',
-              color: '#3B82F6',
-              userId: 'user-1',
-              createdAt: new Date(),
-            },
-            {
-              id: '3',
-              name: 'Personal',
-              type: 'hashtag',
-              color: '#8B5CF6',
-              userId: 'user-1',
-              createdAt: new Date(),
-            },
-          ]
+        const sampleTags: Tag[] = [
+          {
+            id: '1',
+            name: 'Work',
+            type: 'folder',
+            color: '#3B82F6',
+            description: 'Work-related entries and projects',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 5
+          },
+          {
+            id: '2',
+            name: 'Personal',
+            type: 'folder',
+            color: '#8B5CF6',
+            description: 'Personal life and reflections',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 8
+          },
+          {
+            id: '3',
+            name: 'John',
+            type: 'person',
+            color: '#10B981',
+            description: 'My colleague John',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 3
+          },
+          {
+            id: '4',
+            name: 'Sarah',
+            type: 'person',
+            color: '#F59E0B',
+            description: 'My friend Sarah',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 2
+          },
+          {
+            id: '5',
+            name: 'Gratitude',
+            type: 'hashtag',
+            color: '#8B5CF6',
+            description: 'Things I\'m grateful for',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 4
+          },
+          {
+            id: '6',
+            name: 'Goals',
+            type: 'hashtag',
+            color: '#EF4444',
+            description: 'My goals and aspirations',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 6
+          },
+          {
+            id: '7',
+            name: 'Coffee Shop',
+            type: 'location',
+            color: '#F59E0B',
+            description: 'My favorite coffee shop',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 2
+          },
+          {
+            id: '8',
+            name: 'Home Office',
+            type: 'location',
+            color: '#10B981',
+            description: 'My home office space',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 3
+          },
+          {
+            id: '9',
+            name: 'Milestone',
+            type: 'highlight',
+            color: '#EF4444',
+            description: 'Important milestones and achievements',
+            userId: 'user-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            usageCount: 2
+          }
+        ]
 
-          const sampleEntries: JournalEntry[] = [
-            {
-              id: '1',
-              userId: 'user-1',
-              title: 'My First Journal Entry',
-              content: 'Today I started my journaling journey with Journify. I\'m excited to see how this practice will help me reflect on my daily experiences and track my personal growth over time.',
-              mood: 'excited',
-              tags: [sampleTags[0], sampleTags[2]],
-              isHighlight: true,
-              attachments: [],
-              createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-              updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-            },
-            {
-              id: '2',
-              userId: 'user-1',
-              title: 'Work Progress',
-              content: 'Made significant progress on the project today. The team collaboration was excellent and we achieved our sprint goals ahead of schedule. Feeling accomplished and motivated for the next phase.',
-              mood: 'happy',
-              tags: [sampleTags[1]],
-              isHighlight: false,
-              attachments: [],
-              createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
-              updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-            },
-          ]
+        const sampleEntries: JournalEntry[] = [
+          {
+            id: '1',
+            userId: 'user-1',
+            title: 'My First Journal Entry',
+            content: 'Today I started my journaling journey with Journify. I\'m excited to see how this practice will help me reflect on my daily experiences and track my personal growth over time.',
+            mood: 'excited',
+            tags: [sampleTags[0], sampleTags[4]], // Work + Gratitude
+            isHighlight: true,
+            attachments: [],
+            createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+            updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+          },
+          {
+            id: '2',
+            userId: 'user-1',
+            title: 'Work Progress',
+            content: 'Made significant progress on the project today. The team collaboration was excellent and we achieved our sprint goals ahead of schedule. Feeling accomplished and motivated for the next phase.',
+            mood: 'happy',
+            tags: [sampleTags[0], sampleTags[2]], // Work + John
+            isHighlight: false,
+            attachments: [],
+            createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+            updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+          },
+        ]
 
-          set({ entries: sampleEntries, tags: sampleTags })
-        }
+        set({ entries: sampleEntries, tags: sampleTags })
       },
     }),
     {

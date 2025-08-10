@@ -101,4 +101,34 @@ export function getMoodIcon(mood: string): string {
     neutral: '😐',
   }
   return moodIcons[mood] || moodIcons.neutral
+}
+
+export function getTagIcon(tagType: string): string {
+  const tagIcons: Record<string, string> = {
+    folder: '📁',
+    person: '👤',
+    hashtag: '#',
+    location: '📍',
+    highlight: '⭐',
+  }
+  return tagIcons[tagType] || '🏷️'
+}
+
+export function getTagColor(tagType: string): string {
+  const tagColors: Record<string, string> = {
+    folder: '#3B82F6',
+    person: '#10B981',
+    hashtag: '#8B5CF6',
+    location: '#F59E0B',
+    highlight: '#EF4444',
+  }
+  return tagColors[tagType] || '#6B7280'
+}
+
+export function getTagDisplayInfo(tagType: string) {
+  return {
+    icon: getTagIcon(tagType),
+    color: getTagColor(tagType),
+    label: tagType.charAt(0).toUpperCase() + tagType.slice(1)
+  }
 } 

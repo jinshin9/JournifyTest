@@ -6,6 +6,7 @@ import { CalendarView } from './views/calendar-view'
 import { GridView } from './views/grid-view'
 import { StatsView } from './views/stats-view'
 import { EntryEditor } from './entry-editor'
+import { TagManager } from './tag-manager'
 
 export function Dashboard() {
   const { currentView, currentEntry } = useAppStore()
@@ -25,6 +26,8 @@ export function Dashboard() {
       return <GridView />
     case 'stats':
       return <StatsView />
+    case 'tags':
+      return <TagManager />
     default:
       return <TimelineView />
   }

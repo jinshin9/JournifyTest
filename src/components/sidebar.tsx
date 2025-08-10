@@ -88,7 +88,18 @@ export function Sidebar() {
   const handleQuickAction = (action: string) => {
     setActiveAction(action)
     // Handle different actions here
-    console.log('Quick action:', action)
+    if (action === 'tags') {
+      setCurrentView('tags')
+    } else if (action === 'new-entry') {
+      // Handle new entry creation
+      console.log('Creating new entry')
+    } else if (action === 'highlights') {
+      // Handle highlights view
+      console.log('Showing highlights')
+    } else if (action === 'ai-prompts') {
+      // Handle AI prompts
+      console.log('Showing AI prompts')
+    }
   }
 
   return (

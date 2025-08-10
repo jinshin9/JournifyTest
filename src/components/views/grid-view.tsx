@@ -242,19 +242,43 @@ export function GridView() {
                 
                 {/* Tags */}
                 {entry.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-2">
-                    {entry.tags.slice(0, gridSize === 'small' ? 1 : 2).map((tag) => (
-                      <span
-                        key={tag.id}
-                        className={cn(
-                          "inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-secondary text-secondary-foreground rounded-md",
-                          gridSize === 'small' && "text-xs"
-                        )}
-                      >
-                        <Tag className="h-3 w-3" />
-                        {tag.name}
-                      </span>
-                    ))}
+                  <div className="space-y-1 mb-2">
+                    {/* Group tags by type and show limited number based on grid size */}
+                    {['folder', 'person', 'hashtag', 'location', 'highlight'].map((tagType) => {
+                      const typeTags = entry.tags.filter(tag => tag.type === tagType)
+                      if (typeTags.length === 0) return null
+                      
+                      const maxTags = gridSize === 'small' ? 1 : 2
+                      const tagsToShow = typeTags.slice(0, maxTags)
+                      
+                      const typeConfig = {
+                        folder: { color: '#3B82F6' },
+                        person: { color: '#10B981' },
+                        hashtag: { color: '#8B5CF6' },
+                        location: { color: '#F59E0B' },
+                        highlight: { color: '#EF4444' }
+                      }[tagType]
+                      
+                      return (
+                        <div key={tagType} className="flex flex-wrap gap-1">
+                          {tagsToShow.map((tag) => (
+                            <span
+                              key={tag.id}
+                              className={cn(
+                                "inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-secondary text-secondary-foreground rounded-md",
+                                gridSize === 'small' && "text-xs"
+                              )}
+                            >
+                              <div 
+                                className="w-2 h-2 rounded-full flex-shrink-0"
+                                style={{ backgroundColor: tag.color || typeConfig.color }}
+                              />
+                              {tag.name}
+                            </span>
+                          ))}
+                        </div>
+                      )
+                    })}
                     {entry.tags.length > (gridSize === 'small' ? 1 : 2) && (
                       <span className="text-xs text-muted-foreground">
                         +{entry.tags.length - (gridSize === 'small' ? 1 : 2)}

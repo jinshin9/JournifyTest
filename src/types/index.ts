@@ -20,13 +20,20 @@ export interface JournalEntry {
   updatedAt: Date
 }
 
+export type TagType = 'folder' | 'person' | 'hashtag' | 'location' | 'highlight'
+
 export interface Tag {
   id: string
   name: string
-  type: 'folder' | 'person' | 'location' | 'hashtag'
+  type: TagType
   color?: string
+  icon?: string
+  description?: string
+  parentId?: string // For folder hierarchy
   userId: string
   createdAt: Date
+  updatedAt: Date
+  usageCount?: number // Track how often this tag is used
 }
 
 export interface Attachment {

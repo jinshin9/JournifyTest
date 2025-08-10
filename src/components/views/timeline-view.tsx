@@ -176,16 +176,37 @@ export function TimelineView() {
                 
                 {/* Tags */}
                 {entry.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {entry.tags.map((tag) => (
-                      <span
-                        key={tag.id}
-                        className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-md"
-                      >
-                        <Tag className="h-3 w-3" />
-                        <span className="truncate">{tag.name}</span>
-                      </span>
-                    ))}
+                  <div className="space-y-2 mb-3">
+                    {/* Group tags by type */}
+                    {['folder', 'person', 'hashtag', 'location', 'highlight'].map((tagType) => {
+                      const typeTags = entry.tags.filter(tag => tag.type === tagType)
+                      if (typeTags.length === 0) return null
+                      
+                      const typeConfig = {
+                        folder: { label: '📁', color: '#3B82F6' },
+                        person: { label: '👤', color: '#10B981' },
+                        hashtag: { label: '#', color: '#8B5CF6' },
+                        location: { label: '📍', color: '#F59E0B' },
+                        highlight: { label: '⭐', color: '#EF4444' }
+                      }[tagType]
+                      
+                      return (
+                        <div key={tagType} className="flex flex-wrap gap-1">
+                          {typeTags.map((tag) => (
+                            <span
+                              key={tag.id}
+                              className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-md"
+                            >
+                              <div 
+                                className="w-2 h-2 rounded-full flex-shrink-0"
+                                style={{ backgroundColor: tag.color || typeConfig.color }}
+                              />
+                              <span className="truncate">{tag.name}</span>
+                            </span>
+                          ))}
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
                 
