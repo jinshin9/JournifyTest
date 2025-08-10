@@ -424,7 +424,7 @@ export function TagManager() {
               <Input
                 placeholder="Describe what this tag is for"
                 value={editingTag.description || ''}
-                                  onChange={(e) => setEditingTag(prev => prev ? { ...prev, description: e.target.value } : null)}
+                onChange={(e) => setEditingTag(prev => prev ? { ...prev, description: e.target.value } : null)}
               />
             </div>
             

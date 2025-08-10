@@ -8,14 +8,16 @@ import { useAppStore } from '@/store'
 import { cn } from '@/lib/utils'
 
 export default function HomePage() {
-  const { sidebarOpen, setSidebarOpen, theme, initializeSampleData } = useAppStore()
+  const { sidebarOpen, setSidebarOpen, theme, initializeSampleData, entries } = useAppStore()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    // Initialize sample data on first load
-    initializeSampleData()
-  }, [initializeSampleData])
+    // Only initialize sample data if there are no existing entries
+    if (entries.length === 0) {
+      initializeSampleData()
+    }
+  }, [initializeSampleData, entries.length])
 
   if (!mounted) {
     return null
