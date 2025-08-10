@@ -259,6 +259,8 @@ export function GridView() {
                         highlight: { color: '#EF4444' }
                       }[tagType]
                       
+                      if (!typeConfig) return null
+                      
                       return (
                         <div key={tagType} className="flex flex-wrap gap-1">
                           {tagsToShow.map((tag) => (
